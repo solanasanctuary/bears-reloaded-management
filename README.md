@@ -20,3 +20,27 @@ $ cat shdw-drive-upload-16674054379.json| jq . | grep '"status"' | sort | uniq -
 19854     "status": "Not uploaded: File already exists.",
  150     "status": "Uploaded.",
 ```
+
+
+## Use Shadow Drive
+
+Usage:
+
+Set an environment variable for your preferred rpc server.
+Set an environment variable for your update authority key file.
+
+eg:
+```bash
+export RPC=https://api.mainnet-beta.solana.com
+export KEY=~/keys/bears-reloaded/bears-reloaded.json
+```
+
+Update the first set of mints:
+```bash
+cargo run -- --rpc ${RPC} use-shadow-drive --signer ${KEY} --mints data/mints-round1.csv
+```
+
+Update the second set of mints:
+```bash
+cargo run -- --rpc ${RPC} use-shadow-drive --signer ${KEY} --mints data/mints-round2.csv
+```
