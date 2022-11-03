@@ -15,4 +15,8 @@ Writing upload logs to /Users/levicook/bears-reloaded-firebase/shdw-drive-upload
 ✔ Fetching all storage accounts
 Upload Progress | ████████████████████████████████████████ | 100% || 20004/20004 Files
 20004 files uploaded.
+
+$ cat shdw-drive-upload-16674054379.json| jq . | grep '"status"' | sort | uniq -c
+19854     "status": "Not uploaded: File already exists.",
+ 150     "status": "Uploaded.",
 ```
