@@ -7,7 +7,12 @@ This is beta software running on Solana's Mainnet. Use at your own discretion.
 ✔ Successfully created your new storage account of 35GB located at the following address on Solana: B9EYPPmmMEu4nEeKyyiPur7mTAWFRJxFRTpcsv33pUo5
 ```
 
-
 ```bash
-$ shdw-drive upload-multiple-files -kp ~/keys/bears-reloaded/bears-reloaded.json -r $RPC -s B9EYPPmmMEu4nEeKyyiPur7mTAWFRJxFRTpcsv33pUo5 -d public/
+$ shdw-drive upload-multiple-files -kp ~/keys/bears-reloaded/bears-reloaded.json -r $RPC -s B9EYPPmmMEu4nEeKyyiPur7mTAWFRJxFRTpcsv33pUo5 -d public
+This is beta software running on Solana's Mainnet. Use at your own discretion.
+Writing upload logs to /Users/levicook/bears-reloaded-firebase/shdw-drive-upload-16669738104.json.
+✔ Collecting all files
+✔ Fetching all storage accounts
+Upload Progress | ████████████████████████████████████████ | 100% || 20004/20004 Files
+20004 files uploaded.
 ```
