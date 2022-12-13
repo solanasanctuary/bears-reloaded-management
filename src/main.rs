@@ -71,37 +71,41 @@ fn transfer_update_authority(
 
         let mint = address.parse().expect("unable to parse mint address");
         let metadata = find_metadata_address(mint);
-        let metadata = rpc
-            .get_account(&metadata)
-            .expect("unable to fetch metadata account");
-        let metadata = mpl_token_metadata::state::Metadata::deserialize(&mut metadata.data())
-            .expect("unable to deserialize metadata");
 
-        if metadata.update_authority == new_update_authority {
-            println!("{} -", mint.to_string());
-            continue;
+        match rpc.get_account(&metadata) {
+            Ok(metadata) => {
+                let metadata =
+                    mpl_token_metadata::state::Metadata::deserialize(&mut metadata.data())
+                        .expect("unable to deserialize metadata");
+
+                if metadata.update_authority == new_update_authority {
+                    println!("{} -", mint.to_string());
+                    continue;
+                }
+
+                let tx = solana_sdk::transaction::Transaction::new_signed_with_payer(
+                    &vec![mpl_token_metadata::instruction::update_metadata_accounts(
+                        mpl_token_metadata::id(),
+                        find_metadata_address(mint),
+                        signer.pubkey(),
+                        Some(new_update_authority),
+                        None,
+                        None,
+                    )],
+                    Some(&signer.pubkey()),
+                    &[&signer],
+                    rpc.get_latest_blockhash()
+                        .expect("unable to get latest blockhash"),
+                );
+
+                let res = rpc.send_transaction(&tx);
+                match res {
+                    Ok(sig) => println!("{} {}", mint.to_string(), sig),
+                    Err(err) => println!("{} {}", mint.to_string(), err),
+                }
+            }
+            Err(err) => println!("{} {}", mint.to_string(), err),
         }
-
-        let tx = solana_sdk::transaction::Transaction::new_signed_with_payer(
-            &vec![mpl_token_metadata::instruction::update_metadata_accounts(
-                mpl_token_metadata::id(),
-                find_metadata_address(mint),
-                signer.pubkey(),
-                Some(new_update_authority),
-                None,
-                None,
-            )],
-            Some(&signer.pubkey()),
-            &[&signer],
-            rpc.get_latest_blockhash()
-                .expect("unable to get latest blockhash"),
-        );
-
-        let sig = rpc
-            .send_transaction(&tx)
-            .expect("unable to send transaction");
-
-        println!("{} {}", mint.to_string(), sig);
     }
 }
 
